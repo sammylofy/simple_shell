@@ -1,47 +1,97 @@
 #include "shell.h"
 
+#define MAX_INPUT_SIZE 1024
+#define MAX_ARGS 100
+
+/**
+ * display_prompt - Displays the shell prompt if the input is from a terminal.
+ */
+void display_prompt(void)
+{
+	if (isatty(STDIN_FILENO))
+	{
+		write(1, "$ ", 3);
+		fflush(stdout);
+	}
+}
+/**
+ * execute_command - Executes the specified command using fork and execve.
+ * @command: The command to execute.
+ * @args: For arguments
+ */
+void execute_command(char *command, char **args)
+{
+	pid_t pid, wpid;
+	int status;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	} else if (pid == 0)
+	{  /* Child process */
+		if (execve(command, args, NULL) == -1)
+		{
+			perror("./shell ");  /* If execve fails */
+			exit(EXIT_FAILURE);
+		}
+	} else
+	{  /* Parent process */
+		do {
+			wpid = waitpid(pid, &status, WUNTRACED);
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+	}
+}
+
 /**
  * main - function to perform basic shell operations
- * @argc: argument count
- * @argv: arguments COMMAND-LINE args
- * @env: Environmental Variables
  * Return: Always 0
  *
  * Description: basic simple shell operations
  */
-
-int main(int argc, char **argv, char **env)
+int main(void)
 {
-	char *buffer = NULL;
-	size_t buf_size = 0, read;
-	char **array = NULL;
+	char *input = NULL;
+	size_t input_size = 0;
+	ssize_t read_chars;
 
-	if (isatty(STDIN_FILENO))
-		write(1, "$ ", 3);
-	fflush(stdout);
-	read = getline(&buffer, &buf_size, stdin);
+	signal(SIGINT, SIG_IGN);  /* Ignore Ctrl+C for the shell */
 
-	
-
-}
-
-/**
- * free_on_read - function to free the memory
- * @read: The amount read
- * @buf: the buffer
- *
- * Description: To exit
- * Return: no return
- */
-void free_on_read(size_t read, char *buf)
-{
-	if (read == (size_t) -1)
+	while (1)
 	{
-		if (isatty(STDIN_FILENO))
-			write(1, "\n", 1);
-		free(buf);
-		exit(EXIT_FAILURE);
+		display_prompt();
+
+		read_chars = getline(&input, &input_size, stdin);
+		if (read_chars == -1)
+		{  /* Handle Ctrl+D (end of file) */
+			if (isatty(STDIN_FILENO))
+				printf("\n");
+			free(input);
+			exit(EXIT_SUCCESS);
+		}
+		if (read_chars > 0 && input[read_chars - 1] == '\n')
+			input[read_chars - 1] = '\0';  /* Remove newline character */
+		if (lens(input) > 0)
+		{
+			char *token;
+			char *args[MAX_ARGS];
+			int arg_count = 0;
+
+			token = strtok(input, " ");
+			while (token != NULL && arg_count < MAX_ARGS - 1) {
+				args[arg_count] = token;
+				arg_count++;
+				token = strtok(NULL, " ");
+			}
+			args[arg_count] = NULL;
+
+			execute_command(args[0], args);
+		}
+
+
+
+
 	}
-	if (buf[read - 1] == '\n')
-		buf[read - 1] = '\0';
+	return (0);
 }
