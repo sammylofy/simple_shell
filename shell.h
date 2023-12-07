@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+char *my_strtok(char *str, const char *delimiters);
 
 
 #endif
