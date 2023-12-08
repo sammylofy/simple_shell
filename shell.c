@@ -79,7 +79,8 @@ int main(void)
 			int arg_count = 0;
 
 			token = strtok(input, " ");
-			while (token != NULL && arg_count < MAX_ARGS - 1) {
+			while (token != NULL && arg_count < MAX_ARGS - 1)
+			{
 				args[arg_count] = token;
 				arg_count++;
 				token = strtok(NULL, " ");
@@ -88,10 +89,7 @@ int main(void)
 
 			execute_command(args[0], args);
 		}
-
-
-
-
+		free(input);
 	}
 	return (0);
 }
