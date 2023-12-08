@@ -10,7 +10,7 @@ void display_prompt(void)
 {
 	if (isatty(STDIN_FILENO))
 	{
-		write(1, "$ ", 3);
+		my_print("$ ");
 		fflush(stdout);
 	}
 }
@@ -55,9 +55,8 @@ int main(void)
 	char *input = NULL;
 	size_t input_size = 0;
 	ssize_t read_chars;
-
-	signal(SIGINT, SIG_IGN);  /* Ignore Ctrl+C for the shell */
-
+	const char *delim = ": ";
+	/*signal(SIGINT, SIG_IGN);  Ignore Ctrl+C for the shell */
 	while (1)
 	{
 		display_prompt();
@@ -78,18 +77,19 @@ int main(void)
 			char *args[MAX_ARGS];
 			int arg_count = 0;
 
-			token = strtok(input, " ");
+			token = strtok(input, delim);
 			while (token != NULL && arg_count < MAX_ARGS - 1)
 			{
 				args[arg_count] = token;
 				arg_count++;
-				token = strtok(NULL, " ");
+				token = strtok(NULL, delim);
 			}
 			args[arg_count] = NULL;
-
-			execute_command(args[0], args);
+			if (args[0] != NULL)
+				execute_command(args[0], args);
+			free(input);
+			input = NULL;
 		}
-		free(input);
 	}
 	return (0);
 }
