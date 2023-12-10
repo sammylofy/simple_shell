@@ -21,7 +21,7 @@ void display_prompt(void)
  */
 void execute_command(char *command, char **args)
 {
-	pid_t pid, wpid;
+	pid_t pid;
 	int status;
 
 	pid = fork();
@@ -39,7 +39,7 @@ void execute_command(char *command, char **args)
 	} else
 	{  /* Parent process */
 		do {
-			wpid = waitpid(pid, &status, WUNTRACED);
+			waitpid(pid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
 }
