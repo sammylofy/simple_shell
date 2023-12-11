@@ -13,6 +13,7 @@
 char *my_strtok(char *str, const char *delimiters);
 int lens(char *word);
 void my_print(char *word);
+int comp_str(char *first, char *second);
 
 
 #endif

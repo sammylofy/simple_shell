@@ -36,3 +36,34 @@ void my_print(char *word)
 		i++;
 	}
 }
+/**
+ * comp_str - checks whether the both strings are
+ * the same
+ * @first: the first string to compare
+ * @second: the second string to compare
+ * Return: 1 or 0 is returned
+ *
+ * Description: Returns 0 if the same or 1
+ * if otherwise
+ */
+int comp_str(char *first, char *second)
+{
+	int i = 0;
+
+	while (first[i] && second[i])
+	{
+		if (first[i] != second[i])
+		{
+			return (1);
+		}
+		i++;
+	}
+
+	if (first[i] != second[i])
+	{
+		return (1);
+	}
+
+	return (0);
+}
+

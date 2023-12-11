@@ -65,12 +65,17 @@ int main(void)
 		if (read_chars == -1)
 		{  /* Handle Ctrl+D (end of file) */
 			if (isatty(STDIN_FILENO))
-				printf("\n");
+				my_print("\n");
 			free(input);
 			exit(EXIT_SUCCESS);
 		}
 		if (read_chars > 0 && input[read_chars - 1] == '\n')
 			input[read_chars - 1] = '\0';  /* Remove newline character */
+		if (comp_str(input, "exit") == 0)
+		{
+			free(input);
+			exit(EXIT_SUCCESS);
+		}
 		if (lens(input) > 0)
 		{
 			char *token;
