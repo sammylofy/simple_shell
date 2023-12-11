@@ -3,47 +3,7 @@
 #define MAX_INPUT_SIZE 1024
 #define MAX_ARGS 100
 
-/**
- * display_prompt - Displays the shell prompt if the input is from a terminal.
- */
-void display_prompt(void)
-{
-	if (isatty(STDIN_FILENO))
-	{
-		my_print("$ ");
-		fflush(stdout);
-	}
-}
-/**
- * execute_command - Executes the specified command using fork and execve.
- * @command: The command to execute.
- * @args: For arguments
- */
-void execute_command(char *command, char **args)
-{
-	pid_t pid;
-	int status;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	} else if (pid == 0)
-	{  /* Child process */
-		if (execve(command, args, NULL) == -1)
-		{
-			perror("./shell ");  /* If execve fails */
-			exit(EXIT_FAILURE);
-		}
-	} else
-	{  /* Parent process */
-		do {
-			waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-	}
-}
-
+void display_prompt(void);
 /**
  * main - function to perform basic shell operations
  * Return: Always 0
@@ -97,4 +57,15 @@ int main(void)
 		}
 	}
 	return (0);
+}
+/**
+ * display_prompt - Displays the shell prompt if the input is from a terminal.
+ */
+void display_prompt(void)
+{
+        if (isatty(STDIN_FILENO))
+        {
+                my_print("$ ");
+                fflush(stdout);
+        }
 }
