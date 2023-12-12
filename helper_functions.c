@@ -72,11 +72,11 @@ int comp_str(char *first, char *second)
  * Description:prints d enviromental variables.
  */
 
-void print_environment(void) 
+void print_environment(void)
 {
 	char **env = environ;
 
-	for (; *env != NULL; env++) 
+	for (; *env != NULL; env++)
 	{
 		write(STDOUT_FILENO, *env, lens(*env));
 		write(STDOUT_FILENO, "\n", 1);
