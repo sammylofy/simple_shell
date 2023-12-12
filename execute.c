@@ -36,8 +36,11 @@ void execute_command(char *command, char **args, char *path)
 		execute_command(full_path, args, path);
 	} else
 	{
-		char error_message[MAX_INPUT_SIZE];
-
-		sprintf(error_message, "%s: command not found\n", command);
+		if (!find_command_in_path(command, path, full_path))
+		{
+			fprintf(stderr, "%s: command not found\n", command);
+			exit(EXIT_FAILURE);
+		}
+		execute_command(full_path, args, path);
 	}
 }
