@@ -20,5 +20,8 @@ int comp_str(char *first, char *second);
 /*void execute_command(char *command, char **args);*/
 void execute_command(char *command, char **args, char *path);
 int find_command_in_path(char *command, char *path, char *full_path);
+void print_environment(void);
+
+extern char **environ;
 
 #endif

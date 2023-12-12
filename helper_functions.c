@@ -67,3 +67,18 @@ int comp_str(char *first, char *second)
 	return (0);
 }
 
+/**
+ * print_environment - Prints the current environment.
+ * Description:prints d enviromental variables.
+ */
+
+void print_environment(void) 
+{
+	char **env = environ;
+
+	for (; *env != NULL; env++) 
+	{
+		write(STDOUT_FILENO, *env, lens(*env));
+		write(STDOUT_FILENO, "\n", 1);
+	}
+}

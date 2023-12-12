@@ -56,9 +56,17 @@ int main(void)
 			}
 			args[arg_count] = NULL;
 			if (args[0] != NULL)
-				execute_command(args[0], args, path);
-			free(input);
-			input = NULL;
+			{
+				if (comp_str(args[0], "env") == 0)
+
+					print_environment();
+				else
+
+					execute_command(args[0], args, path);
+
+				free(input);
+				input = NULL;
+			}
 		}
 	}
 	return (0);
