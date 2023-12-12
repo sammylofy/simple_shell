@@ -15,7 +15,8 @@ int main(void)
 	const char *delim = ": ";
 	char *path = getenv("PATH");
 
-	if (path == NULL) {
+	if (path == NULL)
+	{
 		write(STDERR_FILENO, "Error: PATH environment variable not set\n", 41);
 		exit(EXIT_FAILURE);
 	}

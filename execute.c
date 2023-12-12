@@ -9,8 +9,8 @@ void execute_command(char *command, char **args, char *path)
 {
 	pid_t pid;
 	int status;
-
 	char full_path[MAX_INPUT_SIZE];
+
 	if (access(command, X_OK) == 0)
 	{
 		pid = fork();
@@ -31,7 +31,7 @@ void execute_command(char *command, char **args, char *path)
 				waitpid(pid, &status, WUNTRACED);
 			} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 		}
-	}else if (find_command_in_path(command, path, full_path))
+	} else if (find_command_in_path(command, path, full_path))
 	{
 		execute_command(full_path, args, path);
 	} else
@@ -41,32 +41,3 @@ void execute_command(char *command, char **args, char *path)
 		sprintf(error_message, "%s: command not found\n", command);
 	}
 }
-/*
-   void execute_command(char *command, char **args, char *path) {
-   pid_t pid, wpid;
-   int status;
-
-   char full_path[MAX_INPUT_SIZE];
-   if (access(command, X_OK) == 0) {
-   pid = fork();
-
-   if (pid == -1) {
-   perror("fork");
-   exit(EXIT_FAILURE);
-   } else if (pid == 0) {
-   execve(command, args, NULL);
-   perror("execve");
-   _exit(EXIT_FAILURE);
-   } else {
-   do {
-   wpid = waitpid(pid, &status, WUNTRACED);
-   } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-   }
-   } else if (find_command_in_path(command, path, full_path)) {
-   execute_command(full_path, args, path);
-   } else {
-   char error_message[MAX_INPUT_SIZE];
-   sprintf(error_message, "%s: command not found\n", command);
-
-   }
-   */
