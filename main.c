@@ -1,8 +1,5 @@
 #include "shell.h"
 
-#define MAX_INPUT_SIZE 1024
-#define MAX_ARGS 100
-
 void display_prompt(void);
 /**
  * main - function to perform basic shell operations
@@ -16,6 +13,13 @@ int main(void)
 	size_t input_size = 0;
 	ssize_t read_chars;
 	const char *delim = ": ";
+	char *path = getenv("PATH");
+
+	if (path == NULL) {
+		write(STDERR_FILENO, "Error: PATH environment variable not set\n", 41);
+		exit(EXIT_FAILURE);
+	}
+
 	/*signal(SIGINT, SIG_IGN);  Ignore Ctrl+C for the shell */
 	while (1)
 	{
@@ -51,7 +55,7 @@ int main(void)
 			}
 			args[arg_count] = NULL;
 			if (args[0] != NULL)
-				execute_command(args[0], args);
+				execute_command(args[0], args, path);
 			free(input);
 			input = NULL;
 		}
@@ -63,9 +67,9 @@ int main(void)
  */
 void display_prompt(void)
 {
-        if (isatty(STDIN_FILENO))
-        {
-                my_print("$ ");
-                fflush(stdout);
-        }
+	if (isatty(STDIN_FILENO))
+	{
+		my_print("$ ");
+		fflush(stdout);
+	}
 }
