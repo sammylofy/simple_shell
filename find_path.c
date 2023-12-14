@@ -24,5 +24,4 @@ int find_command_in_path(char *command, char *path, char *full_path)
 		token = strtok(NULL, ":");
 	}
 	return (0);
-	exit(EXIT_SUCCESS);
 }
