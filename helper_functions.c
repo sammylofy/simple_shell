@@ -38,7 +38,7 @@ void my_print(char *word)
 }
 /**
  * comp_str - checks whether the both strings are
- * the same
+ * the same or not
  * @first: the first string to compare
  * @second: the second string to compare
  * Return: 1 or 0 is returned
